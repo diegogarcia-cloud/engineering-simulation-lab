@@ -1,5 +1,30 @@
 # Unity Engineering Simulation Lab
 
+## Session Resume Notes (2026-05-17)
+
+**Current state:** v0.1.0 shipped. All 11 polish/release items complete.
+
+- Repo: `https://github.com/diegogarcia-cloud/engineering-simulation-lab` (public).
+- Release: `https://github.com/diegogarcia-cloud/engineering-simulation-lab/releases/tag/v0.1.0` (Windows x64 zip uploaded).
+- Latest commit on `main`: `af5cb56` "Polish gravity simulator and prep repo for release".
+- Local origin already points at the new repo; `gh` is authenticated as `diegogarcia-cloud`.
+- Windows build artifact: `D:/Use/Proyect/Build/GravitySimulator/` + zipped at `D:/Use/Proyect/Build/GravitySimulator-v0.1.0-windows-x64.zip`.
+- Reference screenshots in `Docs/`: `gravity-simulator.png` (current), `model.png` (target).
+
+**Tooling installed this session (not in PATH permanently):**
+- `gh` v2.92.0 portable at `C:/Users/Diego/bin/ghtmp/bin/gh.exe`. To use again: `export PATH="/c/Users/Diego/bin/ghtmp/bin:$PATH"` (bash) or set `$env:Path` (PowerShell). Consider replacing with a real install via winget or chocolatey when available.
+
+**Known follow-ups / not done yet:**
+- Scripting backend is **Mono2x**, not IL2CPP. IL2CPP build failed with `BuildProgram exited with code 1` — likely missing Unity IL2CPP module + Visual Studio 2022 C++ workload. To switch: install both, then edit `Assets/Editor/BuildLab.cs` and set `ScriptingImplementation.IL2CPP`.
+- Equation panel uses Unicode glyphs in a Unity UI `Text`, **not** TextMeshPro. TMP was tried but throws `NullReferenceException` in builds because TMP Essential Resources aren't imported (no `TMP Settings` asset in `Resources/`). If TMP-proper is wanted later, run **Window → TextMeshPro → Import TMP Essential Resources**, then re-add `Unity.TextMeshPro` to `Assets/Scripts/EngineeringSimulationLab.asmdef` and revert `AddEquationGlyphLabel` in `DemoLauncherUI.cs` to use `TextMeshProUGUI` with `<sub>`/`<sup>` tags.
+- `Assets/Screenshots/` and `Assets/_Recovery/` are gitignored — keep MCP screenshots out of the repo. Reference screenshots intentionally go in `Docs/`.
+- MCP screenshot path: tool always writes under `Lab/Assets/Screenshots/D__...png` regardless of `screenshot_file_name`. Workaround: copy from there afterwards.
+- UI canvases (overlay) don't appear in MCP `manage_camera screenshot` captures in this environment; verify UI text via `mcpforunity://scene/gameobject/{id}/components`.
+- Build smoke test cmd: `D:/Use/Proyect/Build/GravitySimulator/EngineeringSimulationLab.exe -batchmode -nographics -quit -logFile -` (watch for `NullReferenceException` lines — clean run only emits Unity bootstrap noise).
+- Old remote `https://github.com/diegogarcia-cloud/lab_game_1.0.git` was overwritten by `git remote set-url`; the repo still exists on GitHub if you want to archive or delete it.
+
+**If you want to resume:** open Unity at `D:/Use/Proyect/Lab` with `6000.3.15f1`, open `Assets/Scenes/MainMenuScene.unity`, hit Play. All code lives under `Assets/Scripts/`; build menu is **Engineering Lab → Build Windows x64 (Release)**.
+
 ## Project Guide
 
 Build the project in Unity 6 with C#. The Universal 2D template is a good fit for orbit demos, cellular automata, and 2D engineering visualizations.
